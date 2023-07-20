@@ -22,7 +22,11 @@ def code_analysis(app_dir, typ, manifest_file):
     """Perform the code analysis."""
     try:
         root = Path(settings.BASE_DIR) / 'StaticAnalyzer' / 'views'
-        code_rules = root / 'android' / 'rules' / 'android_rules.yaml'
+        # we are interested only in malware rules for JAR files for now
+        if typ == "jar":
+            code_rules = root / 'android' / 'rules' / 'android_rules.yaml'
+        else:
+            code_rules = root / 'malware' / 'rules' / 'malware_rules.yaml'
         api_rules = root / 'android' / 'rules' / 'android_apis.yaml'
         niap_rules = root / 'android' / 'rules' / 'android_niap.yaml'
         code_findings = {}
