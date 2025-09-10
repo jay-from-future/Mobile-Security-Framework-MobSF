@@ -85,7 +85,11 @@ def code_analysis(checksum, app_dir, typ, manifest_file, android_permissions):
     try:
         root = Path(settings.BASE_DIR) / 'StaticAnalyzer' / 'views'
         and_rules = root / 'android' / 'rules'
-        code_rules = and_rules / 'android_rules.yaml'
+        # we are interested only in malware rules for JAR files for now
+        if typ == "jar":
+            code_rules = and_rules / 'android_rules.yaml'
+        else:
+            code_rules = root / 'malware' / 'rules' / 'malware_rules.yaml'
         api_rules = and_rules / 'android_apis.yaml'
         perm_rules = and_rules / 'android_permissions.yaml'
         niap_rules = and_rules / 'android_niap.yaml'
