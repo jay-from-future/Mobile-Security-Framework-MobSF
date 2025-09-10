@@ -25,7 +25,7 @@ pvc:
     mountPath: /data
     storageClassName: standard
     accessModes:
-      - ReadWriteOnce
+      - ReadWriteMany
 
 customEnv:
   - name: HOME
