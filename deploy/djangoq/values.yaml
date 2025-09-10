@@ -1,0 +1,59 @@
+containerPort: 8000
+health:
+  enabled: false
+ingress:
+  enabled: false
+runAsUser: 1001
+runAsGroup: 1001
+
+# If you have database from the console.intellij.net or from database controller, you can pass secretname here
+# All db fields from secret will be passed to the container with next mapping:
+# db_url from secret 0 will be DB0_URL, host will be DB0_HOST etc
+databaseSecrets: [mobsf-secrets]
+
+resources:
+  requests:
+    cpu: 2
+    memory: 8Gi
+  limits:
+    cpu: 4
+    memory: 16Gi
+
+pvc:
+  data:
+    size: 40Gi
+    mountPath: /data
+    storageClassName: standard
+    accessModes:
+      - ReadWriteOnce
+
+customEnv:
+  - name: HOME
+    value: /data
+  - name: MOBSF_HOME
+    value: /data
+  - name: POSTGRES_DB
+    valueFrom:
+      secretKeyRef:
+        name: mobsf-secrets
+        key: name
+  - name: POSTGRES_USER
+    valueFrom:
+     secretKeyRef:
+       name: mobsf-secrets
+       key: username
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+     secretKeyRef:
+       name: mobsf-secrets
+       key: password
+  - name: POSTGRES_HOST
+    valueFrom:
+      secretKeyRef:
+        name: mobsf-secrets
+        key: host
+  - name: POSTGRES_PORT
+    valueFrom:
+      secretKeyRef:
+        name: mobsf-secrets
+        key: port
